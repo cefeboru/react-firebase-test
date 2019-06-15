@@ -67,6 +67,7 @@
     "style-loader": "0.23.1",
     "terser-webpack-plugin": "1.2.3",
     "ts-pnp": "1.1.2",
+    "tslint": "^5.17.0",
     "typescript": "3.5.1",
     "url-loader": "1.1.2",
     "webpack": "4.29.6",
@@ -144,5 +145,8 @@
     "presets": [
       "react-app"
     ]
+  },
+  "devDependencies": {
+    "tslint-config-airbnb": "^5.11.1"
   }
 }
