@@ -1,0 +1,5 @@
+export const UPDATE_SEARCH_TEXT = '@videos/UPDATE_SEARCH_TEXT';
+export const CLEAR_SEARCH_TEXT = '@videos/CLEAR_SEARCH_TEXT';
+export const UPDATE_SEARCH_RESULTS = '@videos/UPDATE_SEARCH_RESULTS';
+export const CLEAR_SEARCH_RESULTS = '@videos/CLEAR_SEARCH_RESULTS';
+export const ADD_VIDEO_FOR_LATER = '@videos/ADD_VIDEO_FOR_LATER';

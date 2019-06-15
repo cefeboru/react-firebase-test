@@ -3,7 +3,7 @@ export interface SystemState {
   user: firebase.UserInfo | undefined;
 }
 
-export const initialState: SystemState = {
+export const systemInitialState: SystemState = {
   loggedIn: false,
   user: undefined,
 }
