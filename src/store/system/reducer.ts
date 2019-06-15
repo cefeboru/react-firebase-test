@@ -1,19 +1,23 @@
 import { handleActions } from 'redux-actions';
-import { ActionsPayloadTypes } from './actions';
 import { SystemState, initialState } from './state';
-import { SAVE_USER_DATA, CLEAN_USER_DATA, SystemActionsType } from './types';
+import { SAVE_USER_DATA, CLEAN_USER_DATA  } from './types';
+import { ActionsPayloadType } from './actions';
 
-export const systemRecuder = handleActions<SystemState, ActionsPayloadTypes>(
+export const systemRecuder = handleActions<SystemState, ActionsPayloadType>(
   {
     [SAVE_USER_DATA]: (state, action) => {
+      const newUser = action.payload as firebase.UserInfo;
       return {
         ...state,
-        user: action.payload,
+        user: newUser,
         loggedIn: true,
       };
     },
     [CLEAN_USER_DATA]: (state) => {
-      return state;
+      return {
+        loggedIn: false,
+        user: undefined,
+      };
     },
   },
   initialState);

@@ -1,15 +1,17 @@
-import { SAVE_USER_DATA } from './types';
+import { SAVE_USER_DATA, CLEAN_USER_DATA } from './types';
 import { initialState, SystemState } from './state';
-import { saveUserData } from './actions';
+import { saveUserData, cleanUserData } from './actions';
 import { systemRecuder } from './reducer';
 import { Action } from 'redux-actions';
 
 describe('System reducer', () => {
-  describe(`[${SAVE_USER_DATA}]`, () => {
-    let fakeUser: Partial<firebase.UserInfo>;
+  let state: SystemState;
+  let fakeUser: Partial<firebase.UserInfo>;
+  afterEach(() => {
+    state = initialState;
+  });
+  describe(SAVE_USER_DATA, () => {
     let saveUserDataAction: Action<firebase.UserInfo>;
-    let state: SystemState;
-
     beforeAll(() => {
       fakeUser = {
         displayName: 'fakeUserName',
@@ -21,12 +23,34 @@ describe('System reducer', () => {
       state = systemRecuder(initialState, saveUserDataAction);
     });
 
-    it('Should set the loggenIn flag', () => {
+    it('Should set the loggegIn flag to true', () => {
       expect(state).toHaveProperty('loggedIn', true);
     });
 
     it('Should save the user information', () => {
       expect(state).toHaveProperty('user.displayName', fakeUser.displayName);
+    });
+  });
+
+  describe(CLEAN_USER_DATA, () => {
+    let cleanUserDataAction = cleanUserData();
+    beforeAll(() => {
+      cleanUserDataAction = cleanUserData();
+    });
+    beforeEach(() => {
+      state = {
+        ...initialState,
+        loggedIn: true,
+        user: fakeUser as firebase.UserInfo,
+      };
+      state = systemRecuder(state, cleanUserDataAction);
+    });
+    it('Should set the loggedIn flag to false', () => {
+      expect(state).toHaveProperty('loggedIn', false);
+    });
+
+    it('Should clean the user object', () => {
+      expect(state).toHaveProperty('user', undefined);
     });
   });
 });
