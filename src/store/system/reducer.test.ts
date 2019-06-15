@@ -1,8 +1,7 @@
-import { SAVE_USER_DATA, CLEAN_USER_DATA } from './types';
+import { SAVE_USER_DATA, CLEAN_USER_DATA, UPDATE_SIGN_IN_ERROR } from './types';
 import { systemInitialState, SystemState } from './state';
-import { saveUserData, cleanUserData } from './actions';
+import { saveUserData, cleanUserData, updateSignInError } from './actions';
 import { systemRecuder } from './reducer';
-import { Action } from 'redux-actions';
 
 describe('System reducer', () => {
   let state: SystemState;
@@ -11,7 +10,7 @@ describe('System reducer', () => {
     state = systemInitialState;
   });
   describe(SAVE_USER_DATA, () => {
-    let saveUserDataAction: Action<firebase.UserInfo>;
+    let saveUserDataAction: ReturnType<typeof saveUserData>;
     beforeAll(() => {
       fakeUser = {
         displayName: 'fakeUserName',
@@ -51,6 +50,25 @@ describe('System reducer', () => {
 
     it('Should clean the user object', () => {
       expect(state).toHaveProperty('user', undefined);
+    });
+  });
+  describe(UPDATE_SIGN_IN_ERROR, () => {
+    let fakeError: firebase.FirebaseError;
+    let updateLogInErrorAction: ReturnType<typeof updateSignInError>;
+
+    beforeAll(() => {
+      fakeError = {
+        code: 'code',
+        message: 'someMesage',
+        name: 'errorName',
+        stack: 'fakeStack',
+      };
+      updateLogInErrorAction = updateSignInError(fakeError);
+    });
+
+    it('Should update the error', () => {
+      state = systemRecuder(state, updateLogInErrorAction);
+      expect(state).toHaveProperty('logInError', fakeError);
     });
   });
 });
