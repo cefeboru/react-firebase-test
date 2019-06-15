@@ -1,5 +1,5 @@
 import { SAVE_USER_DATA, CLEAN_USER_DATA } from './types';
-import { initialState, SystemState } from './state';
+import { systemInitialState, SystemState } from './state';
 import { saveUserData, cleanUserData } from './actions';
 import { systemRecuder } from './reducer';
 import { Action } from 'redux-actions';
@@ -8,7 +8,7 @@ describe('System reducer', () => {
   let state: SystemState;
   let fakeUser: Partial<firebase.UserInfo>;
   afterEach(() => {
-    state = initialState;
+    state = systemInitialState;
   });
   describe(SAVE_USER_DATA, () => {
     let saveUserDataAction: Action<firebase.UserInfo>;
@@ -20,7 +20,7 @@ describe('System reducer', () => {
 
     beforeEach(() => {
       saveUserDataAction = saveUserData(fakeUser as firebase.User);
-      state = systemRecuder(initialState, saveUserDataAction);
+      state = systemRecuder(systemInitialState, saveUserDataAction);
     });
 
     it('Should set the loggegIn flag to true', () => {
@@ -39,7 +39,7 @@ describe('System reducer', () => {
     });
     beforeEach(() => {
       state = {
-        ...initialState,
+        ...systemInitialState,
         loggedIn: true,
         user: fakeUser as firebase.UserInfo,
       };
