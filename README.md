@@ -37,7 +37,7 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 ### `npm run deploy`
 
-Builds the application and then deploys it to the firebase container [url](https://react-trial-1560400351182.firebaseapp.com/)
+Builds the application and then deploys it to the firebase container [url](https://react-redux-cefeboru.firebaseapp.com/)
 
 ## Learn More
 

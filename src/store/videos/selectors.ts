@@ -6,4 +6,4 @@ export function hasSearchResultsSelector(videosState: VideosState) {
 
 export const isVideoSavedForLaterSelector = (videosState: VideosState) => (videoId: string): boolean => {
   return (videoId in videosState.savedForLater);
-}
+};
