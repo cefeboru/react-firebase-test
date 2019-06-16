@@ -6,13 +6,23 @@ export interface Video {
 }
 
 export interface VideosState {
-  searchText: string;
-  searchResults: any[];
+  search: {
+    text: string;
+    results: any[];
+    isSearching: boolean;
+    error: string;
+    nextPageToken: string;
+  };
   savedForLater: Video[];
 }
 
 export const videosInitialState: VideosState = {
-  searchResults: [],
-  searchText: '',
+  search: {
+    isSearching: false,
+    results: [],
+    text: '',
+    error: '',
+    nextPageToken: '',
+  },
   savedForLater: [],
 };

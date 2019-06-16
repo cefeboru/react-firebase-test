@@ -1,37 +1,75 @@
 import { handleActions } from 'redux-actions';
 import { ActionsPayloadType } from './actions';
 import { videosInitialState, VideosState, Video } from './state';
-import { UPDATE_SEARCH_TEXT, CLEAR_SEARCH_TEXT, UPDATE_SEARCH_RESULTS, CLEAR_SEARCH_RESULTS, ADD_VIDEO_FOR_LATER } from './types';
+import * as Types from './types';
+import { SearchVideosResponse } from '../../modules/YoutubeService';
 
 export const videosReducer = handleActions<VideosState, ActionsPayloadType>(
   {
-    [UPDATE_SEARCH_TEXT]: (state, action) => {
+    [Types.UPDATE_SEARCH_TEXT]: (state, action) => {
       const newText = action.payload as string;
       return {
         ...state,
-        searchText: newText,
+        search: {
+          ...state.search,
+          text: newText,
+        },
       };
     },
-    [CLEAR_SEARCH_TEXT]: (state) => {
+    [Types.CLEAR_SEARCH_TEXT]: (state) => {
       return {
         ...state,
-        searchText: '',
+        search: {
+          ...state.search,
+          text: '',
+        },
       };
     },
-    [UPDATE_SEARCH_RESULTS]: (state, action) => {
-      const searchResults = action.payload as any[];
+    [Types.SEARCH_VIDEOS_REQUEST]: (state) => {
+      return {
+        ...state,
+        search: {
+          ...state.search,
+          isSearching: true,
+        },
+      };
+    },
+    [Types.SEARCH_VIDEOS_REQUEST_SUCCESS]: (state, { payload }) => {
+      const searchResults = payload as SearchVideosResponse;
       return {
         ...state,
         searchResults,
+        search: {
+          ...state.search,
+          isSearching: false,
+          results: searchResults.items,
+          nextPageToken: searchResults.nextPageToken,
+        },
       };
     },
-    [CLEAR_SEARCH_RESULTS]: (state) => {
+    [Types.SEARCH_VIDEOS_REQUEST_FAILURE]: (state, action) => {
+      const error = action.payload as string;
       return {
         ...state,
-        searchResults: [],
+        search: {
+          ...state.search,
+          error,
+          isSearching: false,
+          results: [],
+          nextPageToken: '',
+        },
       };
     },
-    [ADD_VIDEO_FOR_LATER]: (state, action) => {
+    [Types.CLEAR_SEARCH_RESULTS]: (state) => {
+      return {
+        ...state,
+        search: {
+          ...state.search,
+          results: [],
+        },
+      };
+    },
+    [Types.ADD_VIDEO_FOR_LATER]: (state, action) => {
       const newVideo = action.payload as Video;
       return {
         ...state,
