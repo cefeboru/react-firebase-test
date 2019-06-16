@@ -7,22 +7,30 @@ import { Icon } from 'antd';
 export interface SingleVideoProps {
   searchItem: SearchItem;
   onClick: (videoId: string) => any;
-  // addForLater: () => any;
+  saveForLater: (video: SearchItem) => void;
+  isSavedForLater: (videoId: string) => boolean;
 }
 
 export const SingleVideo: React.FC<SingleVideoProps> = ({
-  searchItem: {
+  searchItem,
+  onClick,
+  saveForLater,
+  isSavedForLater,
+}) => {
+  const {
     id: { videoId },
     snippet: { title, description, thumbnails, publishedAt },
-  },
-  onClick,
-}) => {
+  } = searchItem;
   const { url } = thumbnails.medium;
   return (
   <div className={style.container}>
     <div className={style.thumbnail}>
       <img src={url} alt={title} onClick={() => onClick(videoId)} />
-      <Icon type='folder-add' title='Add for later' className={style.addForLater}/>
+      {
+        isSavedForLater(videoId)
+          ? <Icon type='check' title='Saved' className={style.addForLater} />
+          : <Icon type='folder-add' title='Add for later' className={style.addForLater} onClick={() => saveForLater(searchItem)} />
+      }
     </div>
     <h4 className={style.ellipsis} title={title} >{title}</h4>
     <p className={style.ellipsis} title={description}>{description}</p>

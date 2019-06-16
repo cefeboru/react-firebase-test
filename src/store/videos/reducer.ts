@@ -2,7 +2,7 @@ import { handleActions } from 'redux-actions';
 import { ActionsPayloadType } from './actions';
 import { videosInitialState, VideosState, Video } from './state';
 import * as Types from './types';
-import { SearchVideosResponse } from '../../modules/YoutubeService';
+import { SearchVideosResponse, SearchItem } from '../../modules/YoutubeService';
 
 export const videosReducer = handleActions<VideosState, ActionsPayloadType>(
   {
@@ -77,10 +77,13 @@ export const videosReducer = handleActions<VideosState, ActionsPayloadType>(
       };
     },
     [Types.ADD_VIDEO_FOR_LATER]: (state, action) => {
-      const newVideo = action.payload as Video;
+      const newVideo = action.payload as SearchItem;
       return {
         ...state,
-        savedForLater: [...state.savedForLater, newVideo],
+        savedForLater: {
+          ...state.savedForLater,
+          [newVideo.id.videoId]: newVideo,
+        },
       };
     },
     [Types.SHOW_PLAYER_IFRAME]: (state) => {

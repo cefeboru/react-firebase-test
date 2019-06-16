@@ -20,7 +20,9 @@ export interface VideosState {
     videoId: string;
   };
   recommended: SearchItem[];
-  savedForLater: Video[];
+  savedForLater: {
+    [key: string]: SearchItem,
+  };
 }
 
 export const videosInitialState: VideosState = {
@@ -35,6 +37,6 @@ export const videosInitialState: VideosState = {
     isPlaying: false,
     videoId: '',
   },
-  savedForLater: [],
+  savedForLater: {},
   recommended: [],
 };

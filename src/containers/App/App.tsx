@@ -4,19 +4,20 @@ import { BrowserRouter as Router, Switch } from 'react-router-dom';
 import { VideosState } from '../../store/videos/state';
 import { AppState } from '../../store';
 import { connect } from 'react-redux';
-import { updateSearchText } from '../../store/videos/actions';
+import { updateSearchText, addVideoForLater } from '../../store/videos/actions';
 import { Row } from 'antd';
-import { SearchResults, TopBar } from '../../components';
+import { VideoResults, TopBar } from '../../components';
 import { thunkSignOut } from '../../store/system/thunks';
 import style from './App.module.scss';
 import { thunkSearchVideos, thunkClearSearch, thunkStartPlayer, thunkStopPlayer, thunkGetRecommendedVideos } from '../../store/videos/thunks';
-import { hasSearchResultsSelector } from '../../store/videos/selectors';
+import { hasSearchResultsSelector, isVideoSavedForLaterSelector } from '../../store/videos/selectors';
 import { SystemState } from '../../store/system/state';
 
 interface Props {
   system: SystemState;
   videos: VideosState;
   onSearchTextChange: typeof updateSearchText;
+  saveVideoForLater: typeof addVideoForLater;
   signOut: any;
   hasSearchResults: boolean;
   onSearch: (value: string) => void;
@@ -24,13 +25,22 @@ interface Props {
   playVideo: (videoId: string) => void;
   stopVideo: () => void;
   loadRecommendations: () => void;
+  isVideoSavedForLater: (videoId: string) => boolean;
 }
 
-export class App extends React.Component<Props> {
-
-  render() {
-    const { videos, onSearchTextChange, signOut, hasSearchResults, onSearch, clearSearch, playVideo } = this.props;
-    return (
+export const App: React.FC<Props> = (
+  {
+    videos,
+    onSearchTextChange,
+    signOut,
+    hasSearchResults,
+    onSearch,
+    clearSearch,
+    playVideo,
+    saveVideoForLater,
+    isVideoSavedForLater,
+  }) => {
+  return (
       <Router>
         <Login>
           <TopBar
@@ -49,24 +59,26 @@ export class App extends React.Component<Props> {
                     allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
                     allowFullScreen>
                   </iframe>
-                : <SearchResults
-                  searchResults={videos.search.results}
-                  isLoading={videos.search.isSearching}
-                  onResultSelect={playVideo}
-                />
+                : <VideoResults
+                    searchResults={videos.search.results}
+                    isLoading={videos.search.isSearching}
+                    onResultSelect={playVideo}
+                    saveVideoForLater={saveVideoForLater}
+                    isVideoSavedForLater={isVideoSavedForLater}
+                  />
             }
           </Row>
         </Login>
       </Router>
-    );
-  }
-}
+  );
+};
 
 function mapStateToProps(state: AppState) {
   return {
     videos: state.videos,
     system: state.system,
     hasSearchResults: hasSearchResultsSelector(state.videos),
+    isVideoSavedForLater: isVideoSavedForLaterSelector(state.videos),
   };
 }
 
@@ -80,5 +92,6 @@ export default connect(
     playVideo: thunkStartPlayer,
     stopVideo: thunkStopPlayer,
     loadRecommendations: thunkGetRecommendedVideos,
+    saveVideoForLater: addVideoForLater,
   },
 )(App);
