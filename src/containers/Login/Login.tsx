@@ -40,7 +40,7 @@ export class Login extends React.Component<LoginProps> {
           </div>
     );
   }
-};
+}
 
 function mapStateToProps(state: AppState) {
   return {

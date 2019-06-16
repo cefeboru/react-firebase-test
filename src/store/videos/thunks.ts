@@ -6,7 +6,6 @@ export const thunkSearchVideos = (query: string) => async (dispatch: Dispatch) =
   dispatch(Actions.searchVideosRequest());
   try {
     const searchResults = await youtubeService.searchVideos(query);
-    console.log(searchResults);
     dispatch(Actions.searchVideosRequestSuccess(searchResults));
   } catch (error) {
     console.error(error);

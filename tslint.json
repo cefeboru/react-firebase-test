@@ -29,6 +29,13 @@
       "no-console": [true, "log"],
       "import-name": false
     },
-    "rulesDirectory": []
+    "rulesDirectory": [],
+    "linterOptions": {
+      "exclude": [
+        "./node_modules",
+        "./config",
+        "./build"
+      ]
+    }
   }
   
