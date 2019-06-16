@@ -5,4 +5,7 @@
 .topBar {
     background-color: beige;
     padding: 5px 25px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }

@@ -6,7 +6,23 @@ import { SearchVideosResponse } from '../../modules/YoutubeService';
 
 const searchText = 'some search string';
 const newSearchResults: SearchVideosResponse = {
-  items: ['1', '2', '3'],
+  items: [{
+    id: {
+      kind: 'youtube#searchResult',
+      videoId: 'someId',
+    },
+    snippet: {
+      description: 'Some description',
+      title: 'Title',
+    },
+    thumbnails: {
+      default: {
+        height: 300,
+        url: 'someUrl',
+        width: 200,
+      },
+    },
+  }],
   nextPageToken: 'fakeToken',
 };
 

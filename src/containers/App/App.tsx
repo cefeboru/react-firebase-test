@@ -1,6 +1,6 @@
 import React from 'react';
 import Login from '../Login/Login';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { VideosState } from '../../store/videos/state';
 import { AppState } from '../../store';
 import { connect } from 'react-redux';
@@ -42,7 +42,11 @@ export const App: React.FC<Props> = ({ videos, onSearchTextChange, signOut, hasS
           </Col>
         </Row>
         <Row>
-          { videos.search.results.map(v => <div>{JSON.stringify(v)}</div>) }
+          { videos.search.results.map((sr, index) => <Col key={index}>
+            <h3>{sr.snippet.title}</h3>
+            <p>{sr.snippet.description}</p>
+            <img src={sr.snippet.thumbnails.default.url} />
+          </Col>)}
         </Row>
       </Login>
     </Router>

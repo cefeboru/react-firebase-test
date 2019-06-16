@@ -1,3 +1,5 @@
+import { SearchItem } from '../../modules/YoutubeService';
+
 export interface Video {
   videoId: string;
   title: string;
@@ -8,7 +10,7 @@ export interface Video {
 export interface VideosState {
   search: {
     text: string;
-    results: any[];
+    results: SearchItem[];
     isSearching: boolean;
     error: string;
     nextPageToken: string;

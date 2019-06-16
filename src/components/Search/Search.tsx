@@ -19,6 +19,7 @@ export const Search: React.FC<SearchProps> = ({ searchText, updateSearchText, cl
         placeholder='Search Videos'
         value={searchText}
         onChange={({ target: { value } }) => updateSearchText(value)}
+        onKeyDown={({ key }) => key === 'Enter' ? onSearch(searchText) : null}
         addonAfter={
             isLoading
             ? <Icon type='loading'/>

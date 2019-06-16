@@ -11,14 +11,33 @@ export class YoutubeService {
     this.apiKey = process.env.FIREBASE_API_KEY;
   }
 
-  async searchVideos(query: string, maxResults = 15) {
-    const response = await Axios.get(`${this.searchUrl}?maxResults=${maxResults}&&part=id,snippet&type=video&key=${this.apiKey}&q=${query}`);
+  async searchVideos(query: string, maxResults = 30) {
+    const requestUrl = `${this.searchUrl}?maxResults=${maxResults}&&part=id,snippet&type=video&key=${this.apiKey}&q=${query}`;
+    const response = await Axios.get(requestUrl);
     return response.data;
   }
 }
 export interface SearchVideosResponse {
-  items: any[];
+  items: SearchItem[];
   nextPageToken: string;
+}
+
+export interface SearchItem {
+  id: {
+    kind: string;
+    videoId: string;
+  };
+  snippet: {
+    title: string;
+    description: string;
+    thumbnails: {
+      default: {
+        url: string;
+        width: number;
+        height: number;
+      },
+    };
+  };
 }
 
 export default new YoutubeService();
