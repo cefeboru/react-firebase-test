@@ -38,7 +38,6 @@ export const videosReducer = handleActions<VideosState, ActionsPayloadType>(
       const searchResults = payload as SearchVideosResponse;
       return {
         ...state,
-        searchResults,
         search: {
           ...state.search,
           isSearching: false,
@@ -74,6 +73,43 @@ export const videosReducer = handleActions<VideosState, ActionsPayloadType>(
       return {
         ...state,
         savedForLater: [...state.savedForLater, newVideo],
+      };
+    },
+    [Types.SHOW_PLAYER_IFRAME]: (state) => {
+      return {
+        ...state,
+        player: {
+          isPlaying: true,
+          videoId: state.player.videoId,
+        },
+      };
+    },
+    [Types.HIDE_PLAYER_IFRAME]: (state) => {
+      return {
+        ...state,
+        player: {
+          isPlaying: false,
+          videoId: state.player.videoId,
+        },
+      };
+    },
+    [Types.SET_PLAYER_VIDEO_ID]: (state, action) => {
+      const videoId = action.payload as string;
+      return {
+        ...state,
+        player: {
+          ...state.player,
+          videoId,
+        },
+      };
+    },
+    [Types.CLEAR_PLAYER_VIDEO_ID]: (state) => {
+      return {
+        ...state,
+        player: {
+          ...state.player,
+          videoId: '',
+        },
       };
     },
   },

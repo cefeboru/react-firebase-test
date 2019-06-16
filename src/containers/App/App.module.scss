@@ -1,11 +1,6 @@
-.logoutButton {
-    float: right;
-}
+@import '../../variables.scss';
 
-.topBar {
-    background-color: beige;
-    padding: 5px 25px;
-    position: sticky;
-    top: 0;
-    z-index: 10;
+.content {
+    background-color: $background_color;
+    height: calc(100vh - 47px);
 }

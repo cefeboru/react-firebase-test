@@ -14,12 +14,11 @@ const newSearchResults: SearchVideosResponse = {
     snippet: {
       description: 'Some description',
       title: 'Title',
-    },
-    thumbnails: {
-      default: {
-        height: 300,
-        url: 'someUrl',
-        width: 200,
+      publishedAt: '',
+      thumbnails: {
+        default: {} as any,
+        high: {} as any,
+        medium: {} as any,
       },
     },
   }],

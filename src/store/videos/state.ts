@@ -15,6 +15,10 @@ export interface VideosState {
     error: string;
     nextPageToken: string;
   };
+  player: {
+    isPlaying: boolean;
+    videoId: string;
+  };
   savedForLater: Video[];
 }
 
@@ -25,6 +29,10 @@ export const videosInitialState: VideosState = {
     text: '',
     error: '',
     nextPageToken: '',
+  },
+  player: {
+    isPlaying: false,
+    videoId: '',
   },
   savedForLater: [],
 };

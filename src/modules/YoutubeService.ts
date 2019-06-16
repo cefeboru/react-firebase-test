@@ -1,9 +1,6 @@
 import Axios from 'axios';
 
 export class YoutubeService {
-    /**
-     *
-     */
   apiBase: string = 'https://www.googleapis.com/youtube/v3';
   searchUrl: string = `${this.apiBase}/search`;
   apiKey: string;
@@ -28,16 +25,21 @@ export interface SearchItem {
     videoId: string;
   };
   snippet: {
+    publishedAt: string;
     title: string;
     description: string;
     thumbnails: {
-      default: {
-        url: string;
-        width: number;
-        height: number;
-      },
+      default: SearchItemThumbnail,
+      medium: SearchItemThumbnail,
+      high: SearchItemThumbnail,
     };
   };
+}
+
+export interface SearchItemThumbnail {
+  url: string;
+  width: number;
+  height: number;
 }
 
 export default new YoutubeService();

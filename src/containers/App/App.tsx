@@ -1,16 +1,15 @@
 import React from 'react';
 import Login from '../Login/Login';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, Switch } from 'react-router-dom';
 import { VideosState } from '../../store/videos/state';
 import { AppState } from '../../store';
 import { connect } from 'react-redux';
 import { updateSearchText } from '../../store/videos/actions';
-import 'antd/dist/antd.css';
-import { Button, Icon, Row, Col } from 'antd';
-import { Search } from '../../components/Search/Search';
+import { Row } from 'antd';
+import { SearchResults, TopBar } from '../../components';
 import { thunkSignOut } from '../../store/system/thunks';
 import style from './App.module.scss';
-import { thunkSearchVideos, thunkClearSearch } from '../../store/videos/thunks';
+import { thunkSearchVideos, thunkClearSearch, thunkStartPlayer, thunkStopPlayer } from '../../store/videos/thunks';
 import { hasSearchResultsSelector } from '../../store/videos/selectors';
 
 interface Props {
@@ -18,40 +17,53 @@ interface Props {
   onSearchTextChange: typeof updateSearchText;
   signOut: any;
   hasSearchResults: boolean;
-  onSearch: any;
-  clearSearch: any;
+  onSearch: (value: string) => void;
+  clearSearch: () => void;
+  playVideo: (videoId: string) => void;
+  stopVideo: () => void;
 }
 
-export const App: React.FC<Props> = ({ videos, onSearchTextChange, signOut, hasSearchResults, onSearch, clearSearch }) => {
-  return (
-    <Router>
-      <Login>
-        <Row type='flex'  justify='space-between' className={style.topBar}>
-          <Col xs={22} sm={18} md={16} xl={10}>
-            <Search
-              searchText={videos.search.text}
-              clearSearch={clearSearch}
-              onSearch={onSearch}
-              updateSearchText={onSearchTextChange}
-              hasSearchResults={hasSearchResults}
-              isLoading={videos.search.isSearching}
-            />
-          </Col>
-          <Col>
-            <Button icon='logout' onClick={signOut} className={style.logoutButton}/>
-          </Col>
-        </Row>
-        <Row>
-          { videos.search.results.map((sr, index) => <Col key={index}>
-            <h3>{sr.snippet.title}</h3>
-            <p>{sr.snippet.description}</p>
-            <img src={sr.snippet.thumbnails.default.url} />
-          </Col>)}
-        </Row>
-      </Login>
-    </Router>
-  );
-};
+export class App extends React.Component<Props> {
+
+  componentDidMount() {
+    this.props.onSearch('');
+  }
+
+  render() {
+    const { videos, onSearchTextChange, signOut, hasSearchResults, onSearch, clearSearch, playVideo, stopVideo } = this.props;
+    return (
+      <Router>
+        <Login>
+          <TopBar
+            isLoading={videos.search.isSearching}
+            searchText={videos.search.text}
+            {...{ clearSearch, signOut, onSearch, hasSearchResults, onSearchTextChange }}
+          />
+          <Row type='flex' justify='space-between' className={style.content}>
+            <Switch>
+
+            </Switch>
+            {
+              videos.player.isPlaying
+                ? <iframe
+                    width='100%'
+                    height='100%'
+                    src={`https://www.youtube.com/embed/${videos.player.videoId}`}
+                    allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
+                    allowFullScreen>
+                  </iframe>
+                : <SearchResults
+                  searchResults={videos.search.results}
+                  isLoading={videos.search.isSearching}
+                  onResultSelect={playVideo}
+                />
+            }
+          </Row>
+        </Login>
+      </Router>
+    );
+  }
+}
 
 function mapStateToProps(state: AppState) {
   return {
@@ -67,5 +79,7 @@ export default connect(
     signOut: thunkSignOut,
     onSearch: thunkSearchVideos,
     clearSearch: thunkClearSearch,
+    playVideo: thunkStartPlayer,
+    stopVideo: thunkStopPlayer,
   },
 )(App);

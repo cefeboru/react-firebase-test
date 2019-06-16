@@ -17,3 +17,13 @@ export const thunkClearSearch = () => async (dispatch: Dispatch) => {
   dispatch(Actions.clearSearchResults());
   dispatch(Actions.clearSearchText());
 };
+
+export const thunkStartPlayer = (videoId: string) => async (dispatch: Dispatch) => {
+  dispatch(Actions.setPlayerVideoId(videoId));
+  dispatch(Actions.showPlayerIframe());
+};
+
+export const thunkStopPlayer = () => async (dispatch: Dispatch) => {
+  dispatch(Actions.clearPlayerVideoId());
+  dispatch(Actions.hidePlayerIframe());
+};

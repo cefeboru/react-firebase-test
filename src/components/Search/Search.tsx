@@ -24,8 +24,8 @@ export const Search: React.FC<SearchProps> = ({ searchText, updateSearchText, cl
             isLoading
             ? <Icon type='loading'/>
             : searchText && hasSearchResults
-              ? <Icon type='close' onClick={clearSearch}/>
-              : <Icon  type='search' onClick={() => onSearch(searchText)} />
+              ? <Icon type='close' onClick={clearSearch} title='Clear Search'/>
+              : <Icon  type='search' onClick={() => onSearch(searchText)} title='Search'/>
         }
         disabled={isLoading}
       />

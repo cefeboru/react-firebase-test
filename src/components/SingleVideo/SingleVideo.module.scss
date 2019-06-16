@@ -1,0 +1,29 @@
+@import '../../variables.scss';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  margin: 10px auto;
+  height: 214px;
+  @include sm {
+    width: 240px;
+  }
+
+  @include md {
+    width: 210px;
+  }
+  
+  img {
+    height: 110px;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+.ellipsis {
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
