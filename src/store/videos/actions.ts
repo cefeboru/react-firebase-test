@@ -19,6 +19,6 @@ export const searchVideosRequestFailure = createAction<string>(Types.SEARCH_VIDE
 
 export const recommendedVideosRequest = createAction(Types.RECOMMENDED_VIDEOS_REQUEST);
 export const recommendedVideosRequestSuccess = createAction<SearchVideosResponse>(Types.RECOMMENDED_VIDEOS_REQUEST_SUCCESS);
-export const recommendedVideosRequestFailure = createAction<string>(Types.RECOMMENDED_VIDEOS_REQUEST_SUCCESS);
+export const recommendedVideosRequestFailure = createAction<string>(Types.RECOMMENDED_VIDEOS_REQUEST_FAILURE);
 
 export type ActionsPayloadType = string | SearchVideosResponse | Video | undefined;

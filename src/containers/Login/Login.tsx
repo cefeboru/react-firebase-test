@@ -10,7 +10,7 @@ export interface LoginProps {
   loadUserFromStorage: any;
   signOut: any;
   signIn: any;
-  error: firebase.FirebaseError | undefined;
+  error: string | undefined;
 }
 
 // Use it as a HOC to protect the whole application
@@ -21,24 +21,24 @@ export class Login extends React.Component<LoginProps> {
   }
 
   render() {
-    const { user, signOut, signIn, error, children } = this.props;
-    if (user) {
-      return <React.Fragment>{children}</React.Fragment>;
-    }
+    const { user, signIn, error, children } = this.props;
     return (
-          <div className={style.login}>
-              <div className={style.content}>
-                  {
-                      user
-                      ? <GoogleButton label='Log out' onClick={signOut} />
-                      : <GoogleButton onClick={signIn} />
-                  }
-                  {
-                      error && <div className={style.error}>{error}</div>
-                  }
-              </div>
+    <React.Fragment>
+      {
+        !user
+        ? (
+        <div className={style.login}>
+          <div className={style.content}>
+            <GoogleButton onClick={signIn} />
           </div>
-    );
+          {
+            error && <div className={`${style.error} ${style.content}`}>{error}</div>
+          }
+        </div>) : (
+          <React.Fragment>{children}</React.Fragment>
+        )
+      }
+    </React.Fragment>);
   }
 }
 

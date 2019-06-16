@@ -9,7 +9,7 @@ import { Row } from 'antd';
 import { SearchResults, TopBar } from '../../components';
 import { thunkSignOut } from '../../store/system/thunks';
 import style from './App.module.scss';
-import { thunkSearchVideos, thunkClearSearch, thunkStartPlayer, thunkStopPlayer } from '../../store/videos/thunks';
+import { thunkSearchVideos, thunkClearSearch, thunkStartPlayer, thunkStopPlayer, thunkGetRecommendedVideos } from '../../store/videos/thunks';
 import { hasSearchResultsSelector } from '../../store/videos/selectors';
 import { SystemState } from '../../store/system/state';
 
@@ -23,13 +23,10 @@ interface Props {
   clearSearch: () => void;
   playVideo: (videoId: string) => void;
   stopVideo: () => void;
+  loadRecommendations: () => void;
 }
 
 export class App extends React.Component<Props> {
-
-  componentDidMount() {
-    if (this.props.system.loggedIn) this.props.onSearch('');
-  }
 
   render() {
     const { videos, onSearchTextChange, signOut, hasSearchResults, onSearch, clearSearch, playVideo } = this.props;
@@ -82,5 +79,6 @@ export default connect(
     clearSearch: thunkClearSearch,
     playVideo: thunkStartPlayer,
     stopVideo: thunkStopPlayer,
+    loadRecommendations: thunkGetRecommendedVideos,
   },
 )(App);

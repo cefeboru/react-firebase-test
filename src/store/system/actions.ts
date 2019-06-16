@@ -3,7 +3,7 @@ import { createAction } from 'redux-actions';
 
 export const saveUserData = createAction<firebase.User>(SAVE_USER_DATA);
 export const cleanUserData = createAction(CLEAN_USER_DATA);
-export const updateSignInError = createAction<firebase.FirebaseError>(UPDATE_SIGN_IN_ERROR);
+export const updateSignInError = createAction<string>(UPDATE_SIGN_IN_ERROR);
 export const saveAccessToken = createAction<string>(SAVE_ACCESS_TOKEN);
 
-export type ActionsPayloadType = firebase.User | undefined | firebase.FirebaseError | string;
+export type ActionsPayloadType = firebase.User | undefined | string;

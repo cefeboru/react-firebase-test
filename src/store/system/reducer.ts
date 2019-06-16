@@ -22,7 +22,7 @@ export const systemRecuder = handleActions<SystemState, ActionsPayloadType>(
       };
     },
     [UPDATE_SIGN_IN_ERROR]: (state, action) => {
-      const error = action.payload as firebase.FirebaseError;
+      const error = action.payload as string;
       return {
         ...state,
         loggedIn: false,

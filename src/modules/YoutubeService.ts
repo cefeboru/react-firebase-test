@@ -17,7 +17,7 @@ export default class YoutubeService {
     const requestUrl = `${this.searchUrl}?maxResults=${maxResults}`
     + `&part=id,snippet`
     + `&type=video`
-    + `&key=${this.apiKey}`
+    // + `&key=${this.apiKey}`
     + `&q=${query}`
     + `&access_token=${this.accessToken}`;
     const response = await Axios.get(requestUrl);

@@ -1,7 +1,7 @@
 export interface SystemState {
   loggedIn: boolean;
   user: firebase.UserInfo | undefined;
-  logInError: firebase.FirebaseError | undefined;
+  logInError: string | undefined;
   accessToken: string | undefined;
 }
 
