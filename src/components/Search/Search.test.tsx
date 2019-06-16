@@ -1,6 +1,6 @@
 import React from 'react';
 import { ReactWrapper, shallow, mount } from 'enzyme';
-import { Search, SearchProps } from '.';
+import { Search, SearchProps } from './Search';
 import { Icon } from 'antd';
 import Input from 'antd/lib/input';
 
@@ -11,14 +11,21 @@ describe('<Search />', () => {
   const updateSearchTextMock = jest.fn();
   beforeEach(() => {
     searchComponent = mount(
-      <Search onSearch={onSearchMock} searchText='' updateSearchText={updateSearchTextMock} clearSearch={clearSearchMock} />,
+      <Search
+        onSearch={onSearchMock}
+        searchText=''
+        updateSearchText={updateSearchTextMock}
+        clearSearch={clearSearchMock}
+        hasSearchResults={false}
+        isLoading={false}
+      />,
     );
     onSearchMock.mockClear();
     clearSearchMock.mockClear();
     updateSearchTextMock.mockClear();
   });
 
-  describe('When search text is empty', () => {
+  describe('When there are not search results', () => {
     let renderedIcon: ReactWrapper;
     beforeEach(() => {
       renderedIcon = searchComponent.find(Icon);
@@ -34,10 +41,10 @@ describe('<Search />', () => {
     });
   });
 
-  describe('When search text is not empty', () => {
+  describe('When search text is not empty and there are search results', () => {
     let renderedIcon: ReactWrapper;
     beforeEach(() => {
-      searchComponent.setProps({ searchText: 'Some text' });
+      searchComponent.setProps({ searchText: 'Some text', hasSearchResults: true });
       renderedIcon = searchComponent.find(Icon);
     });
     it('Should render a search icon', () => {
