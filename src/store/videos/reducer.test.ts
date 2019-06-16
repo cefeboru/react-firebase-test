@@ -32,7 +32,7 @@ describe('Videos Reducer', () => {
     state = videosInitialState;
   });
 
-  describe(Types.UPDATE_SEARCH_TEXT, () => {
+  describe(Types.SET_SEARCH_TEXT, () => {
     const action = Actions.updateSearchText(searchText);
     it('Should update the search text correctly', () => {
       state = videosReducer(state, action);

@@ -1,15 +1,25 @@
 import Axios from 'axios';
 
-export class YoutubeService {
-  apiBase: string = 'https://www.googleapis.com/youtube/v3';
-  searchUrl: string = `${this.apiBase}/search`;
-  apiKey: string;
-  constructor() {
+export default class YoutubeService {
+  private apiBase: string = 'https://www.googleapis.com/youtube/v3';
+  private searchUrl: string = `${this.apiBase}/search`;
+  private apiKey: string;
+  private accessToken: string = '';
+
+  constructor(accessToken: string | undefined) {
     this.apiKey = process.env.FIREBASE_API_KEY;
+    this.accessToken = accessToken || '';
+    return this;
   }
 
   async searchVideos(query: string, maxResults = 30) {
-    const requestUrl = `${this.searchUrl}?maxResults=${maxResults}&&part=id,snippet&type=video&key=${this.apiKey}&q=${query}`;
+    if (!this.accessToken) throw new Error('accessToken is not set');
+    const requestUrl = `${this.searchUrl}?maxResults=${maxResults}`
+    + `&part=id,snippet`
+    + `&type=video`
+    + `&key=${this.apiKey}`
+    + `&q=${query}`
+    + `&access_token=${this.accessToken}`;
     const response = await Axios.get(requestUrl);
     return response.data;
   }
@@ -41,5 +51,3 @@ export interface SearchItemThumbnail {
   width: number;
   height: number;
 }
-
-export default new YoutubeService();

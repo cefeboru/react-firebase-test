@@ -11,8 +11,10 @@ import { thunkSignOut } from '../../store/system/thunks';
 import style from './App.module.scss';
 import { thunkSearchVideos, thunkClearSearch, thunkStartPlayer, thunkStopPlayer } from '../../store/videos/thunks';
 import { hasSearchResultsSelector } from '../../store/videos/selectors';
+import { SystemState } from '../../store/system/state';
 
 interface Props {
+  system: SystemState;
   videos: VideosState;
   onSearchTextChange: typeof updateSearchText;
   signOut: any;
@@ -26,11 +28,11 @@ interface Props {
 export class App extends React.Component<Props> {
 
   componentDidMount() {
-    this.props.onSearch('');
+    if (this.props.system.loggedIn) this.props.onSearch('');
   }
 
   render() {
-    const { videos, onSearchTextChange, signOut, hasSearchResults, onSearch, clearSearch, playVideo, stopVideo } = this.props;
+    const { videos, onSearchTextChange, signOut, hasSearchResults, onSearch, clearSearch, playVideo } = this.props;
     return (
       <Router>
         <Login>
@@ -40,12 +42,10 @@ export class App extends React.Component<Props> {
             {...{ clearSearch, signOut, onSearch, hasSearchResults, onSearchTextChange }}
           />
           <Row type='flex' justify='space-between' className={style.content}>
-            <Switch>
-
-            </Switch>
             {
               videos.player.isPlaying
                 ? <iframe
+                    title={videos.player.videoId}
                     width='100%'
                     height='100%'
                     src={`https://www.youtube.com/embed/${videos.player.videoId}`}
@@ -68,6 +68,7 @@ export class App extends React.Component<Props> {
 function mapStateToProps(state: AppState) {
   return {
     videos: state.videos,
+    system: state.system,
     hasSearchResults: hasSearchResultsSelector(state.videos),
   };
 }

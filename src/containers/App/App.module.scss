@@ -3,4 +3,5 @@
 .content {
     background-color: $background_color;
     height: calc(100vh - 47px);
+    overflow-y: scroll;
 }

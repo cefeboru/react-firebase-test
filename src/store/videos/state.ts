@@ -19,6 +19,7 @@ export interface VideosState {
     isPlaying: boolean;
     videoId: string;
   };
+  recommended: SearchItem[];
   savedForLater: Video[];
 }
 
@@ -35,4 +36,5 @@ export const videosInitialState: VideosState = {
     videoId: '',
   },
   savedForLater: [],
+  recommended: [],
 };

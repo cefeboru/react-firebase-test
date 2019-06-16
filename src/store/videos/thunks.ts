@@ -1,11 +1,13 @@
 import { Dispatch } from 'redux';
-import youtubeService from '../../modules/YoutubeService';
 import * as Actions from './actions';
+import YoutubeService from '../../modules/YoutubeService';
+import { AppState } from '..';
 
-export const thunkSearchVideos = (query: string) => async (dispatch: Dispatch) => {
+export const thunkSearchVideos = (query: string) => async (dispatch: Dispatch, getState: () => AppState) => {
   dispatch(Actions.searchVideosRequest());
   try {
-    const searchResults = await youtubeService.searchVideos(query);
+    const accessToken = getState().system.accessToken;
+    const searchResults = await new YoutubeService(accessToken).searchVideos(query);
     dispatch(Actions.searchVideosRequestSuccess(searchResults));
   } catch (error) {
     console.error(error);
@@ -13,9 +15,21 @@ export const thunkSearchVideos = (query: string) => async (dispatch: Dispatch) =
   }
 };
 
-export const thunkClearSearch = () => async (dispatch: Dispatch) => {
+export const thunkGetRecommendedVideos = () => async (dispatch: Dispatch, getState: () => AppState) => {
+  dispatch(Actions.recommendedVideosRequest());
+  try {
+    const searchResults = await new YoutubeService(getState().system.accessToken).searchVideos('');
+    dispatch(Actions.recommendedVideosRequestSuccess(searchResults));
+  } catch (error) {
+    console.error(error);
+    dispatch(Actions.recommendedVideosRequestFailure(error.message));
+  }
+};
+
+export const thunkClearSearch = () => async (dispatch: Dispatch, getState: () => AppState) => {
   dispatch(Actions.clearSearchResults());
   dispatch(Actions.clearSearchText());
+  await thunkSearchVideos('')(dispatch, getState);
 };
 
 export const thunkStartPlayer = (videoId: string) => async (dispatch: Dispatch) => {

@@ -13,7 +13,7 @@ export interface TopBarProps {
   hasSearchResults: boolean;
 }
 
-export const TopBar: React.FC<TopBarProps> = ({ searchText, isLoading, clearSearch, onSearchTextChange, onSearch, signOut, hasSearchResults}) => {
+export const TopBar: React.FC<TopBarProps> = ({ searchText, isLoading, clearSearch, onSearchTextChange, onSearch, signOut, hasSearchResults }) => {
   return (
     <Row type='flex' justify='space-between' className={style.topBar}>
       <Col xs={22} sm={18} md={16} xl={10}>

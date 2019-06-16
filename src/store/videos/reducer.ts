@@ -6,7 +6,7 @@ import { SearchVideosResponse } from '../../modules/YoutubeService';
 
 export const videosReducer = handleActions<VideosState, ActionsPayloadType>(
   {
-    [Types.UPDATE_SEARCH_TEXT]: (state, action) => {
+    [Types.SET_SEARCH_TEXT]: (state, action) => {
       const newText = action.payload as string;
       return {
         ...state,
@@ -31,6 +31,10 @@ export const videosReducer = handleActions<VideosState, ActionsPayloadType>(
         search: {
           ...state.search,
           isSearching: true,
+        },
+        player: {
+          isPlaying: false,
+          videoId: '',
         },
       };
     },
@@ -65,6 +69,10 @@ export const videosReducer = handleActions<VideosState, ActionsPayloadType>(
         search: {
           ...state.search,
           results: [],
+        },
+        player: {
+          isPlaying: false,
+          videoId: '',
         },
       };
     },
@@ -109,6 +117,44 @@ export const videosReducer = handleActions<VideosState, ActionsPayloadType>(
         player: {
           ...state.player,
           videoId: '',
+        },
+      };
+    },
+    [Types.RECOMMENDED_VIDEOS_REQUEST]: (state) => {
+      return {
+        ...state,
+        search: {
+          ...state.search,
+          isSearching: true,
+        },
+        player: {
+          isPlaying: false,
+          videoId: '',
+        },
+      };
+    },
+    [Types.RECOMMENDED_VIDEOS_REQUEST_SUCCESS]: (state, action) => {
+      const payload = action.payload as SearchVideosResponse;
+      return {
+        ...state,
+        search: {
+          ...state.search,
+          isSearching: false,
+          results: payload.items,
+          nextPageToken: payload.nextPageToken,
+        },
+      };
+    },
+    [Types.RECOMMENDED_VIDEOS_REQUEST_FAILURE]: (state, action) => {
+      const error = action.payload as string;
+      return {
+        ...state,
+        search: {
+          ...state.search,
+          error,
+          isSearching: false,
+          results: [],
+          nextPageToken: '',
         },
       };
     },

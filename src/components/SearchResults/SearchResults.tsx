@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Row } from 'antd';
+import { Col, Row, Spin } from 'antd';
 import Loader from 'react-loading';
 import { SearchItem } from '../../modules/YoutubeService';
 import { SingleVideo } from '../SingleVideo/SingleVideo';
@@ -18,7 +18,8 @@ export const SearchResults: React.FC<SearchResultsProps> = ({ isLoading, searchR
     <Row  gutter={24} className={`${style.grid} ${isLoading && style.loading}`} {...isLoadingRowProps}>
       {
         isLoading
-          ? <Col><Loader type='spin' className={style.loader} color='black' height='150px' width='150px'/></Col>
+          // ? <Col><Loader type='spin' className={style.loader} color='black' height='150px' width='150px'/></Col>
+          ? <Spin tip="Loading..." />
           : searchResults.map((sr, index) => <Col
               xs={12}
               sm={12}
