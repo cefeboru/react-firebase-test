@@ -1,6 +1,6 @@
-import { SAVE_USER_DATA, CLEAN_USER_DATA, UPDATE_SIGN_IN_ERROR } from './types';
+import { SAVE_USER_DATA, CLEAN_USER_DATA, UPDATE_SIGN_IN_ERROR, SAVE_ACCESS_TOKEN } from './types';
 import { systemInitialState, SystemState } from './state';
-import { saveUserData, cleanUserData, updateSignInError } from './actions';
+import { saveUserData, cleanUserData, updateSignInError, saveAccessToken } from './actions';
 import { systemRecuder } from './reducer';
 
 describe('System reducer', () => {
@@ -51,7 +51,12 @@ describe('System reducer', () => {
     it('Should clean the user object', () => {
       expect(state).toHaveProperty('user', undefined);
     });
+
+    it('Should clean the access token', () => {
+      expect(state).toHaveProperty('accessToken', undefined);
+    });
   });
+
   describe(UPDATE_SIGN_IN_ERROR, () => {
     let fakeError: firebase.FirebaseError;
     let updateLogInErrorAction: ReturnType<typeof updateSignInError>;
@@ -69,6 +74,19 @@ describe('System reducer', () => {
     it('Should update the error', () => {
       state = systemRecuder(state, updateLogInErrorAction);
       expect(state).toHaveProperty('logInError', fakeError);
+    });
+  });
+
+  describe(SAVE_ACCESS_TOKEN, () => {
+    let token: string;
+    let action: ReturnType<typeof saveAccessToken>;
+    beforeAll(() => {
+      token = 'fakeToken';
+      action = saveAccessToken(token);
+    });
+    it('Should save access token', () => {
+      state = systemRecuder(state, action);
+      expect(state).toHaveProperty('accessToken', token);
     });
   });
 });

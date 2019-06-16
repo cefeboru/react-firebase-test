@@ -22,6 +22,7 @@ export class FirebaseApp {
     this.auth = app.auth();
         // this.db = app.database();
     this.googleProvider = new app.auth.GoogleAuthProvider();
+    this.googleProvider.addScope('https://www.googleapis.com/auth/youtube.readonly');
   }
 
   doSignInWithGoogle = () => {
