@@ -1,6 +1,5 @@
 import * as app from 'firebase/app';
 import 'firebase/auth';
-import { ProvidersMapper } from 'react-with-firebase-auth';
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -31,12 +30,6 @@ export class FirebaseApp {
 
   doSignOut = () => {
     return this.auth.signOut();
-  }
-
-  getAuthProviders = (): ProvidersMapper => {
-    return {
-      googleProvider: this.googleProvider,
-    };
   }
 
   getAuth() {

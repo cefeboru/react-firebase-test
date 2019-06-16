@@ -19,7 +19,7 @@ export const SearchResults: React.FC<SearchResultsProps> = ({ isLoading, searchR
       {
         isLoading
           // ? <Col><Loader type='spin' className={style.loader} color='black' height='150px' width='150px'/></Col>
-          ? <Spin tip="Loading..." />
+          ? <Spin tip='Loading...' />
           : searchResults.map((sr, index) => <Col
               xs={12}
               sm={12}

@@ -31,4 +31,4 @@ export const TopBar: React.FC<TopBarProps> = ({ searchText, isLoading, clearSear
       </Col>
     </Row>
   );
-}
+};
