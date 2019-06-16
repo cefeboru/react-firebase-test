@@ -6,6 +6,7 @@
   overflow: hidden;
   margin: 10px auto;
   height: 214px;
+
   @include sm {
     width: 240px;
   }
@@ -14,10 +15,32 @@
     width: 210px;
   }
   
-  img {
-    height: 110px;
-    &:hover {
-      cursor: pointer;
+  .thumbnail {
+    position: relative;
+    width: 210px;
+    img {
+      height: 110px;
+      width: 100%;
+      transition-duration:0.5s;
+      &:hover {
+        cursor: pointer;
+        opacity: 0.9;
+      }
+    }
+
+    .addForLater {
+      position: absolute;
+      left: 10px;
+      top: 5px;
+      z-index: 9;
+      color: white;
+      transition-duration:0.5s;
+      opacity: 0.4;
+
+      &:hover {
+        cursor: pointer;
+        opacity: 1;
+      }
     }
   }
 }

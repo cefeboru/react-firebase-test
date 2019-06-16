@@ -15,13 +15,13 @@ export const SearchResults: React.FC<SearchResultsProps> = ({ isLoading, searchR
   const isLoadingRowProps = isLoading && { type:'flex', justify:'space-around', align:'middle' } as any;
   return (
   <Row type='flex' justify='center' className={style.content}>
-    <Row  gutter={24} className={`${style.grid} ${isLoading && style.loading}`} {...isLoadingRowProps}>
+    <Row gutter={24} className={`${style.grid} ${isLoading && style.loading}`} {...isLoadingRowProps}>
       {
         isLoading
           // ? <Col><Loader type='spin' className={style.loader} color='black' height='150px' width='150px'/></Col>
           ? <Spin tip='Loading...' />
           : searchResults.map((sr, index) => <Col
-              xs={12}
+              xs={20}
               sm={12}
               md={8}
               xl={6}
