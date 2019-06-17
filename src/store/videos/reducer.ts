@@ -143,9 +143,9 @@ export const videosReducer = handleActions<VideosState, ActionsPayloadType>(
         search: {
           ...state.search,
           isSearching: false,
-          results: payload.items,
           nextPageToken: payload.nextPageToken,
         },
+        recommended: payload.items,
       };
     },
     [Types.RECOMMENDED_VIDEOS_REQUEST_FAILURE]: (state, action) => {

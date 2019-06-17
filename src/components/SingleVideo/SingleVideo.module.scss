@@ -24,7 +24,7 @@
       transition-duration:0.5s;
       &:hover {
         cursor: pointer;
-        opacity: 0.9;
+        opacity: 0.8;
       }
     }
 
@@ -33,14 +33,14 @@
       left: 10px;
       top: 5px;
       z-index: 9;
-      color: white;
+      color: black;
       transition-duration:0.5s;
-      background-color: rgba(238, 238, 238, 0.1);
+      background-color: rgba(238, 238, 238, 0.4);
       padding: 5px;
 
       &:hover {
         cursor: pointer;
-        background-color: rgba(238, 238, 238, 0.3);
+        background-color: rgba(243, 243, 243, 0.8);
       }
     }
   }

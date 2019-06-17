@@ -30,7 +30,7 @@ interface Props {
 
 export const App: React.FC<Props> = (
   {
-    videos,
+    videos: { player, recommended, search },
     onSearchTextChange,
     signOut,
     hasSearchResults,
@@ -44,24 +44,24 @@ export const App: React.FC<Props> = (
       <Router>
         <Login>
           <TopBar
-            isLoading={videos.search.isSearching}
-            searchText={videos.search.text}
+            isLoading={search.isSearching}
+            searchText={search.text}
             {...{ clearSearch, signOut, onSearch, hasSearchResults, onSearchTextChange }}
           />
           <Row type='flex' justify='space-between' className={style.content}>
             {
-              videos.player.isPlaying
+              player.isPlaying
                 ? <iframe
-                    title={videos.player.videoId}
+                    title={player.videoId}
                     width='100%'
                     height='100%'
-                    src={`https://www.youtube.com/embed/${videos.player.videoId}`}
+                    src={`https://www.youtube.com/embed/${player.videoId}`}
                     allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
                     allowFullScreen>
                   </iframe>
                 : <VideoResults
-                    searchResults={videos.search.results}
-                    isLoading={videos.search.isSearching}
+                    searchResults={hasSearchResults ? search.results : recommended }
+                    isLoading={search.isSearching}
                     onResultSelect={playVideo}
                     saveVideoForLater={saveVideoForLater}
                     isVideoSavedForLater={isVideoSavedForLater}

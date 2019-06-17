@@ -25,7 +25,7 @@ export const SingleVideo: React.FC<SingleVideoProps> = ({
   return (
   <div className={style.container}>
     <div className={style.thumbnail}>
-      <img src={url} alt={title} onClick={() => onClick(videoId)} />
+      <img src={url} alt={title} title='Play video' onClick={() => onClick(videoId)} />
       {
         isSavedForLater(videoId)
           ? <Icon type='check' title='Saved' className={style.addForLater} />
