@@ -18,7 +18,7 @@ export const systemRecuder = handleActions<SystemState, ActionsPayloadType>(
         accessToken: undefined,
         logInError: undefined,
         loggedIn: false,
-        user: undefined,
+        user: {} as any,
       };
     },
     [UPDATE_SIGN_IN_ERROR]: (state, action) => {

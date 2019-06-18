@@ -1,5 +1,6 @@
-import * as app from 'firebase/app';
+import firebase from 'firebase/app';
 import 'firebase/auth';
+import 'firebase/database';
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -12,15 +13,21 @@ const firebaseConfig = {
 };
 
 export class FirebaseApp {
-  private auth: app.auth.Auth;
-    /// private db: app.database.Database;
-  private googleProvider: app.auth.GoogleAuthProvider;
+  private auth: firebase.auth.Auth;
+  private db: firebase.database.Database;
+  private googleProvider: firebase.auth.GoogleAuthProvider;
 
   constructor() {
-    app.initializeApp(firebaseConfig);
-    this.auth = app.auth();
-        // this.db = app.database();
-    this.googleProvider = new app.auth.GoogleAuthProvider();
+    try {
+      const defaultApp = firebase.app();
+      this.auth = defaultApp.auth();
+      this.db = firebase.database();
+    } catch (err) {
+      firebase.initializeApp(firebaseConfig);
+      this.auth = firebase.auth();
+      this.db = firebase.database();
+    }
+    this.googleProvider = new firebase.auth.GoogleAuthProvider();
     this.googleProvider.addScope('https://www.googleapis.com/auth/youtube.readonly');
   }
 
@@ -35,6 +42,12 @@ export class FirebaseApp {
   getAuth() {
     return this.auth;
   }
+
+  getDb() {
+    return this.db;
+  }
 }
 
-export default new FirebaseApp();
+const instance = new FirebaseApp();
+
+export default instance;

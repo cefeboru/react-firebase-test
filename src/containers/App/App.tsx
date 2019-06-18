@@ -1,23 +1,24 @@
 import React from 'react';
 import Login from '../Login/Login';
-import { BrowserRouter as Router, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { VideosState } from '../../store/videos/state';
 import { AppState } from '../../store';
 import { connect } from 'react-redux';
-import { updateSearchText, addVideoForLater } from '../../store/videos/actions';
+import { updateSearchText } from '../../store/videos/actions';
 import { Row } from 'antd';
-import { VideoResults, TopBar } from '../../components';
+import { VideoResults, TopBar, VideoIframe } from '../../components';
 import { thunkSignOut } from '../../store/system/thunks';
 import style from './App.module.scss';
-import { thunkSearchVideos, thunkClearSearch, thunkStartPlayer, thunkStopPlayer, thunkGetRecommendedVideos } from '../../store/videos/thunks';
+import * as videoThunks from '../../store/videos/thunks';
 import { hasSearchResultsSelector, isVideoSavedForLaterSelector } from '../../store/videos/selectors';
 import { SystemState } from '../../store/system/state';
+import { mapSavedVideosToArray } from '../../modules/mapSavedVideosToArray';
 
 interface Props {
   system: SystemState;
   videos: VideosState;
   onSearchTextChange: typeof updateSearchText;
-  saveVideoForLater: typeof addVideoForLater;
+  saveVideoForLater: any;
   signOut: any;
   hasSearchResults: boolean;
   onSearch: (value: string) => void;
@@ -30,13 +31,12 @@ interface Props {
 
 export const App: React.FC<Props> = (
   {
-    videos: { player, recommended, search },
+    videos: { recommended, search, savedForLater },
     onSearchTextChange,
     signOut,
     hasSearchResults,
     onSearch,
     clearSearch,
-    playVideo,
     saveVideoForLater,
     isVideoSavedForLater,
   }) => {
@@ -49,24 +49,27 @@ export const App: React.FC<Props> = (
             {...{ clearSearch, signOut, onSearch, hasSearchResults, onSearchTextChange }}
           />
           <Row type='flex' justify='space-between' className={style.content}>
-            {
-              player.isPlaying
-                ? <iframe
-                    title={player.videoId}
-                    width='100%'
-                    height='100%'
-                    src={`https://www.youtube.com/embed/${player.videoId}`}
-                    allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
-                    allowFullScreen>
-                  </iframe>
-                : <VideoResults
-                    searchResults={hasSearchResults ? search.results : recommended }
-                    isLoading={search.isSearching}
-                    onResultSelect={playVideo}
-                    saveVideoForLater={saveVideoForLater}
-                    isVideoSavedForLater={isVideoSavedForLater}
-                  />
-            }
+            <Switch>
+              <Route path='/' exact render={({ history }) =>
+                <VideoResults
+                  searchResults={hasSearchResults ? search.results : recommended }
+                  isLoading={search.isSearching}
+                  onResultSelect={(videoId: string) => history.push(`video/${videoId}`)}
+                  saveVideoForLater={saveVideoForLater}
+                  isVideoSavedForLater={isVideoSavedForLater}
+                />}
+              />
+              <Route path='savedForLater' exact render={({ history }) =>
+                <VideoResults
+                  searchResults={mapSavedVideosToArray(savedForLater)}
+                  isLoading={search.isSearching}
+                  onResultSelect={(videoId: string) => history.push(`video/${videoId}`)}
+                  saveVideoForLater={saveVideoForLater}
+                  isVideoSavedForLater={isVideoSavedForLater}
+                />
+              }/>
+              <Route path='/video/:id' render={props => <VideoIframe videoId={props.match.params.id}/>}/>
+            </Switch>
           </Row>
         </Login>
       </Router>
@@ -87,11 +90,11 @@ export default connect(
   {
     onSearchTextChange: updateSearchText,
     signOut: thunkSignOut,
-    onSearch: thunkSearchVideos,
-    clearSearch: thunkClearSearch,
-    playVideo: thunkStartPlayer,
-    stopVideo: thunkStopPlayer,
-    loadRecommendations: thunkGetRecommendedVideos,
-    saveVideoForLater: addVideoForLater,
+    onSearch: videoThunks.thunkSearchVideos,
+    clearSearch: videoThunks.thunkClearSearch,
+    playVideo: videoThunks.thunkStartPlayer,
+    stopVideo: videoThunks.thunkStopPlayer,
+    loadRecommendations: videoThunks.thunkGetRecommendedVideos,
+    saveVideoForLater: videoThunks.thunkAddVideoForLater,
   },
 )(App);

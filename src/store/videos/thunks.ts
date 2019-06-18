@@ -1,7 +1,9 @@
 import { Dispatch } from 'redux';
 import * as Actions from './actions';
-import YoutubeService from '../../modules/YoutubeService';
+import YoutubeService, { SearchItem } from '../../modules/YoutubeService';
 import { AppState } from '..';
+import { FirebaseApp } from '../../modules/FirebaseApp';
+import { SavedForLaterMap } from './state';
 
 export const thunkSearchVideos = (query: string) => async (dispatch: Dispatch, getState: () => AppState) => {
   dispatch(Actions.searchVideosRequest());
@@ -40,4 +42,30 @@ export const thunkStartPlayer = (videoId: string) => async (dispatch: Dispatch) 
 export const thunkStopPlayer = () => async (dispatch: Dispatch) => {
   dispatch(Actions.clearPlayerVideoId());
   dispatch(Actions.hidePlayerIframe());
+};
+
+export const thunkAddVideoForLater = (video: SearchItem) => async (dispatch: Dispatch, getState: () => AppState) => {
+  try {
+    const firebaseDb = new FirebaseApp().getDb();
+    const state = getState();
+    const userId = state.system.user.uid;
+    const videoId = video.id.videoId;
+    const VideoDbPath = `users/${userId}/savedForLaterVideos/${videoId}`;
+    await firebaseDb.ref(VideoDbPath).set(video);
+    await dispatch(Actions.addVideoForLater(video));
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
+export const thunkLoadSavedForLaterVideos = () => async (dispatch: Dispatch, getState: () => AppState) => {
+  const firebaseDB = new FirebaseApp().getDb();
+  const state = getState();
+  const userId = state.system.user.uid;
+  const savedVideosDbPath = `users/${userId}/savedForLaterVideos/`;
+  const dbSnapshot = await firebaseDB.ref(savedVideosDbPath).once('value');
+  if (dbSnapshot.val()) {
+    const savedForLaterVideos: SavedForLaterMap = dbSnapshot.val();
+    dispatch(Actions.setVideosForLater(savedForLaterVideos));
+  }
 };

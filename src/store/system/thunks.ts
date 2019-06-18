@@ -1,7 +1,7 @@
 import FirebaseApp from '../../modules/FirebaseApp';
 import { saveUserData, updateSignInError, cleanUserData, saveAccessToken } from './actions';
 import { Dispatch } from 'redux';
-import { thunkGetRecommendedVideos } from '../videos/thunks';
+import { thunkGetRecommendedVideos, thunkLoadSavedForLaterVideos } from '../videos/thunks';
 import { AppState } from '..';
 
 export const thunkSignIn = () => async (dispatch: Dispatch, getState: () => AppState) => {
@@ -15,7 +15,8 @@ export const thunkSignIn = () => async (dispatch: Dispatch, getState: () => AppS
     await sessionStorage.setItem('oauthAccessToken', credential.oauthAccessToken);
     dispatch(saveUserData(asyncResp.user));
     dispatch(saveAccessToken(credential.oauthAccessToken));
-    return thunkGetRecommendedVideos()(dispatch, getState);
+    await thunkGetRecommendedVideos()(dispatch, getState);
+    await thunkLoadSavedForLaterVideos()(dispatch, getState);
   } catch (err) {
     dispatch(updateSignInError(err.message));
   }
@@ -36,9 +37,10 @@ export const thunkLoadUserFromStorage = () => async (dispatch: Dispatch, getStat
   try {
     const user = await sessionStorage.getItem('user');
     const oauthAccessToken = await sessionStorage.getItem('oauthAccessToken');
-    if (user) dispatch(saveUserData(JSON.parse(user)));
-    if (oauthAccessToken) dispatch(saveAccessToken(oauthAccessToken));
-    return thunkGetRecommendedVideos()(dispatch, getState);
+    if (user) await dispatch(saveUserData(JSON.parse(user)));
+    if (oauthAccessToken) await dispatch(saveAccessToken(oauthAccessToken));
+    await thunkGetRecommendedVideos()(dispatch, getState);
+    await thunkLoadSavedForLaterVideos()(dispatch, getState);
   } catch (error) {
     console.error(error);
   }

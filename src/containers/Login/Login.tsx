@@ -11,9 +11,9 @@ export interface LoginProps {
   signOut: any;
   signIn: any;
   error: string | undefined;
+  loggedIn: boolean;
 }
 
-// Use it as a HOC to protect the whole application
 export class Login extends React.Component<LoginProps> {
 
   componentDidMount() {
@@ -21,11 +21,11 @@ export class Login extends React.Component<LoginProps> {
   }
 
   render() {
-    const { user, signIn, error, children } = this.props;
+    const { user, signIn, error, children, loggedIn } = this.props;
     return (
     <React.Fragment>
       {
-        !user
+        !loggedIn
         ? (
         <div className={style.login}>
           <div className={style.content}>
@@ -46,6 +46,7 @@ function mapStateToProps(state: AppState) {
   return {
     user: state.system.user,
     error: state.system.logInError,
+    loggedIn: state.system.loggedIn,
   };
 }
 

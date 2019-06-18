@@ -49,7 +49,7 @@ describe('System reducer', () => {
     });
 
     it('Should clean the user object', () => {
-      expect(state).toHaveProperty('user', undefined);
+      expect(state).toHaveProperty('user', {});
     });
 
     it('Should clean the access token', () => {
@@ -58,16 +58,11 @@ describe('System reducer', () => {
   });
 
   describe(UPDATE_SIGN_IN_ERROR, () => {
-    let fakeError: firebase.FirebaseError;
+    let fakeError: string;
     let updateLogInErrorAction: ReturnType<typeof updateSignInError>;
 
     beforeAll(() => {
-      fakeError = {
-        code: 'code',
-        message: 'someMesage',
-        name: 'errorName',
-        stack: 'fakeStack',
-      };
+      fakeError = 'someMesage';
       updateLogInErrorAction = updateSignInError(fakeError);
     });
 

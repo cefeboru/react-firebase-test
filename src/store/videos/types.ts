@@ -1,6 +1,7 @@
 export const SET_SEARCH_TEXT = '@videos/SET_SEARCH_TEXT';
 export const CLEAR_SEARCH_TEXT = '@videos/CLEAR_SEARCH_TEXT';
 export const CLEAR_SEARCH_RESULTS = '@videos/CLEAR_SEARCH_RESULTS';
+export const SET_VIDEOS_FOR_LATER = '@videos/SET_VIDEOS_FOR_LATER';
 export const ADD_VIDEO_FOR_LATER = '@videos/ADD_VIDEO_FOR_LATER';
 
 export const SET_PLAYER_VIDEO_ID = '@videos/SET_PLAYER_VIDEO_ID';

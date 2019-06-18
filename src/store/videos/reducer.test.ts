@@ -2,7 +2,7 @@ import * as Types from './types';
 import * as Actions from './actions';
 import { VideosState, videosInitialState, Video } from './state';
 import { videosReducer } from './reducer';
-import { SearchVideosResponse } from '../../modules/YoutubeService';
+import { SearchVideosResponse, SearchItem } from '../../modules/YoutubeService';
 
 const searchText = 'some search string';
 const newSearchResults: SearchVideosResponse = {
@@ -61,11 +61,24 @@ describe('Videos Reducer', () => {
   });
 
   describe(Types.ADD_VIDEO_FOR_LATER, () => {
-    const newVideo: Video = { description: '',  thumbnailUrl: 'fakeURL', title: 'fakeTitle', videoId: 'someId' };
+    const thumbnail = { height: 0, width: 0, url: '' };
+    const newVideo: SearchItem = {
+      id: { kind: '', videoId: 'newVideoId' },
+      snippet: {
+        description: '',
+        publishedAt: '',
+        title: '',
+        thumbnails: {
+          default: thumbnail,
+          high: thumbnail,
+          medium: thumbnail,
+        },
+      },
+    };
     const action = Actions.addVideoForLater(newVideo);
     it('Should add a new video', () => {
       state = videosReducer(state, action);
-      expect(state.savedForLater).toContain(newVideo);
+      expect(state.savedForLater.newVideoId).toEqual(newVideo);
     });
   });
 

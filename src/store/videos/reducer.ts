@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions';
 import { ActionsPayloadType } from './actions';
-import { videosInitialState, VideosState, Video } from './state';
+import { videosInitialState, VideosState, Video, SavedForLaterMap } from './state';
 import * as Types from './types';
 import { SearchVideosResponse, SearchItem } from '../../modules/YoutubeService';
 
@@ -159,6 +159,13 @@ export const videosReducer = handleActions<VideosState, ActionsPayloadType>(
           results: [],
           nextPageToken: '',
         },
+      };
+    },
+    [Types.SET_VIDEOS_FOR_LATER]: (state, action) => {
+      const savedForLater = action.payload as SavedForLaterMap;
+      return {
+        ...state,
+        savedForLater,
       };
     },
   },
