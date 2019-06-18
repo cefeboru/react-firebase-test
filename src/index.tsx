@@ -4,13 +4,19 @@ import { Provider } from 'react-redux';
 import './index.css';
 import App from './containers/App/App';
 import * as serviceWorker from './serviceWorker';
-import { default as configureStore } from './store';
+import configureStore, { browserHistory } from './store';
+import Login from './containers/Login/Login';
+import { ConnectedRouter } from 'connected-react-router';
 
 const store = configureStore();
 
 const Root = () => (
   <Provider store={store}>
-      <App />
+    <ConnectedRouter history={browserHistory}>
+      <Login>
+        <App/>
+      </Login>
+    </ConnectedRouter>
   </Provider>
 );
 

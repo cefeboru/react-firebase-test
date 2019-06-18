@@ -1,6 +1,6 @@
 import { createAction } from 'redux-actions';
 import * as Types from './types';
-import { Video, SavedForLaterMap } from './state';
+import { SavedForLaterMap } from './state';
 import { SearchVideosResponse, SearchItem } from '../../modules/YoutubeService';
 
 export const updateSearchText = createAction<string>(Types.SET_SEARCH_TEXT);
@@ -23,4 +23,8 @@ export const recommendedVideosRequest = createAction(Types.RECOMMENDED_VIDEOS_RE
 export const recommendedVideosRequestSuccess = createAction<SearchVideosResponse>(Types.RECOMMENDED_VIDEOS_REQUEST_SUCCESS);
 export const recommendedVideosRequestFailure = createAction<string>(Types.RECOMMENDED_VIDEOS_REQUEST_FAILURE);
 
-export type ActionsPayloadType = string | SearchVideosResponse | SearchItem | undefined | SavedForLaterMap;
+export type ActionsPayloadType = string |
+  SearchVideosResponse |
+  SearchItem |
+  undefined |
+  SavedForLaterMap;

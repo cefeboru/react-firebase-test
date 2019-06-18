@@ -4,9 +4,11 @@ import YoutubeService, { SearchItem } from '../../modules/YoutubeService';
 import { AppState } from '..';
 import { FirebaseApp } from '../../modules/FirebaseApp';
 import { SavedForLaterMap } from './state';
+import { push } from 'connected-react-router';
 
 export const thunkSearchVideos = (query: string) => async (dispatch: Dispatch, getState: () => AppState) => {
   dispatch(Actions.searchVideosRequest());
+  dispatch(push('/'));
   try {
     const accessToken = getState().system.accessToken;
     const searchResults = await new YoutubeService(accessToken).searchVideos(query);
@@ -32,16 +34,6 @@ export const thunkClearSearch = () => async (dispatch: Dispatch, getState: () =>
   dispatch(Actions.clearSearchResults());
   dispatch(Actions.clearSearchText());
   await thunkSearchVideos('')(dispatch, getState);
-};
-
-export const thunkStartPlayer = (videoId: string) => async (dispatch: Dispatch) => {
-  dispatch(Actions.setPlayerVideoId(videoId));
-  dispatch(Actions.showPlayerIframe());
-};
-
-export const thunkStopPlayer = () => async (dispatch: Dispatch) => {
-  dispatch(Actions.clearPlayerVideoId());
-  dispatch(Actions.hidePlayerIframe());
 };
 
 export const thunkAddVideoForLater = (video: SearchItem) => async (dispatch: Dispatch, getState: () => AppState) => {

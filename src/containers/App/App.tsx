@@ -1,6 +1,5 @@
 import React from 'react';
-import Login from '../Login/Login';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import { VideosState } from '../../store/videos/state';
 import { AppState } from '../../store';
 import { connect } from 'react-redux';
@@ -23,8 +22,6 @@ interface Props {
   hasSearchResults: boolean;
   onSearch: (value: string) => void;
   clearSearch: () => void;
-  playVideo: (videoId: string) => void;
-  stopVideo: () => void;
   loadRecommendations: () => void;
   isVideoSavedForLater: (videoId: string) => boolean;
 }
@@ -41,38 +38,36 @@ export const App: React.FC<Props> = (
     isVideoSavedForLater,
   }) => {
   return (
-      <Router>
-        <Login>
-          <TopBar
-            isLoading={search.isSearching}
-            searchText={search.text}
-            {...{ clearSearch, signOut, onSearch, hasSearchResults, onSearchTextChange }}
+    <React.Fragment>
+      <TopBar
+      isLoading={search.isSearching}
+      searchText={search.text}
+      {...{ clearSearch, signOut, onSearch, hasSearchResults, onSearchTextChange }}
+      />
+      <Row type='flex' justify='space-between' className={style.content}>
+        <Switch>
+          <Route path='/' exact render={({ history }) =>
+            <VideoResults
+              searchResults={hasSearchResults ? search.results : recommended }
+              isLoading={search.isSearching}
+              onResultSelect={(videoId: string) => history.push(`video/${videoId}`)}
+              saveVideoForLater={saveVideoForLater}
+              isVideoSavedForLater={isVideoSavedForLater}
+            />}
           />
-          <Row type='flex' justify='space-between' className={style.content}>
-            <Switch>
-              <Route path='/' exact render={({ history }) =>
-                <VideoResults
-                  searchResults={hasSearchResults ? search.results : recommended }
-                  isLoading={search.isSearching}
-                  onResultSelect={(videoId: string) => history.push(`video/${videoId}`)}
-                  saveVideoForLater={saveVideoForLater}
-                  isVideoSavedForLater={isVideoSavedForLater}
-                />}
-              />
-              <Route path='savedForLater' exact render={({ history }) =>
-                <VideoResults
-                  searchResults={mapSavedVideosToArray(savedForLater)}
-                  isLoading={search.isSearching}
-                  onResultSelect={(videoId: string) => history.push(`video/${videoId}`)}
-                  saveVideoForLater={saveVideoForLater}
-                  isVideoSavedForLater={isVideoSavedForLater}
-                />
-              }/>
-              <Route path='/video/:id' render={props => <VideoIframe videoId={props.match.params.id}/>}/>
-            </Switch>
-          </Row>
-        </Login>
-      </Router>
+          <Route path='/savedForLater' exact render={({ history }) =>
+            <VideoResults
+              searchResults={mapSavedVideosToArray(savedForLater)}
+              isLoading={search.isSearching}
+              onResultSelect={(videoId: string) => history.push(`video/${videoId}`)}
+              saveVideoForLater={saveVideoForLater}
+              isVideoSavedForLater={isVideoSavedForLater}
+            />
+          }/>
+          <Route path='/video/:id' render={props => <VideoIframe videoId={props.match.params.id}/>}/>
+        </Switch>
+      </Row>
+    </React.Fragment>
   );
 };
 
@@ -92,8 +87,6 @@ export default connect(
     signOut: thunkSignOut,
     onSearch: videoThunks.thunkSearchVideos,
     clearSearch: videoThunks.thunkClearSearch,
-    playVideo: videoThunks.thunkStartPlayer,
-    stopVideo: videoThunks.thunkStopPlayer,
     loadRecommendations: videoThunks.thunkGetRecommendedVideos,
     saveVideoForLater: videoThunks.thunkAddVideoForLater,
   },

@@ -1,7 +1,8 @@
 import React from 'react';
-import { Row, Col, Button } from 'antd';
+import { Row, Col, Button, Icon } from 'antd';
 import { Search } from '..';
 import style from './TopBar.module.scss';
+import { Link } from 'react-router-dom';
 
 export interface TopBarProps {
   searchText: string;
@@ -15,20 +16,30 @@ export interface TopBarProps {
 
 export const TopBar: React.FC<TopBarProps> = ({ searchText, isLoading, clearSearch, onSearchTextChange, onSearch, signOut, hasSearchResults }) => {
   return (
-    <Row type='flex' justify='space-between' className={style.topBar}>
-      <Col xs={22} sm={18} md={16} xl={10}>
-        <Search
-          searchText={searchText}
-          clearSearch={clearSearch}
-          onSearch={onSearch}
-          updateSearchText={onSearchTextChange}
-          hasSearchResults={hasSearchResults}
-          isLoading={isLoading}
-        />
-      </Col>
-      <Col>
-        <Button icon='logout' onClick={signOut} className={style.logoutButton} title='Logout' />
-      </Col>
-    </Row>
+    <React.Fragment>
+      <Row type='flex' justify='space-between' align='middle' className={style.topBar}>
+        <Col className={style.navigation}>
+          <Link to='/' className={style.link}>
+            <Icon type='home' title='Home' />
+          </Link>
+          <Link to='/savedForLater' className={style.link}>
+            <Icon type='menu' title='Saved videos'/>
+          </Link>
+        </Col>
+        <Col xs={22} sm={20} md={18} xl={16} xxl={10} >
+          <Search
+            searchText={searchText}
+            clearSearch={clearSearch}
+            onSearch={onSearch}
+            updateSearchText={onSearchTextChange}
+            hasSearchResults={hasSearchResults}
+            isLoading={isLoading}
+          />
+        </Col>
+        <Col>
+          <Button icon='logout' onClick={signOut} className={style.logoutButton} title='Logout' />
+        </Col>
+      </Row>
+    </React.Fragment>
   );
 };

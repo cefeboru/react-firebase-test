@@ -3,7 +3,7 @@ import style from './Login.module.scss';
 import GoogleButton from 'react-google-button';
 import { AppState } from '../../store';
 import { connect } from 'react-redux';
-import { thunkSignIn, thunkSignOut, thunkLoadUserFromStorage } from '../../store/system/thunks';
+import { thunkSignIn, thunkSignOut, thunkMaybeLoadUserFromStorage } from '../../store/system/thunks';
 
 export interface LoginProps {
   user: firebase.UserInfo | undefined;
@@ -21,22 +21,20 @@ export class Login extends React.Component<LoginProps> {
   }
 
   render() {
-    const { user, signIn, error, children, loggedIn } = this.props;
+    const { signIn, error, children, loggedIn } = this.props;
     return (
     <React.Fragment>
       {
-        !loggedIn
-        ? (
-        <div className={style.login}>
-          <div className={style.content}>
-            <GoogleButton onClick={signIn} />
-          </div>
-          {
-            error && <div className={`${style.error} ${style.content}`}>{error}</div>
-          }
-        </div>) : (
-          <React.Fragment>{children}</React.Fragment>
-        )
+        loggedIn
+          ? { children }
+          : <div className={style.login}>
+              <div className={style.content}>
+                <GoogleButton onClick={signIn} />
+              </div>
+              {
+                error && <div className={`${style.error} ${style.content}`}>{error}</div>
+              }
+            </div>
       }
     </React.Fragment>);
   }
@@ -55,6 +53,6 @@ export default connect(
   {
     signIn: thunkSignIn,
     signOut: thunkSignOut,
-    loadUserFromStorage: thunkLoadUserFromStorage,
+    loadUserFromStorage: thunkMaybeLoadUserFromStorage,
   },
 )(Login);

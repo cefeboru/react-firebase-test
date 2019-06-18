@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions';
 import { ActionsPayloadType } from './actions';
-import { videosInitialState, VideosState, Video, SavedForLaterMap } from './state';
+import { videosInitialState, VideosState, SavedForLaterMap } from './state';
 import * as Types from './types';
 import { SearchVideosResponse, SearchItem } from '../../modules/YoutubeService';
 

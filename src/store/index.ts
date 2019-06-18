@@ -1,22 +1,30 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
-import reduxThunk from 'redux-thunk';
-
 import { composeWithDevTools } from 'redux-devtools-extension';
+import { connectRouter, routerMiddleware } from 'connected-react-router';
 import { systemRecuder } from './system/reducer';
 import { videosReducer } from './videos/reducer';
+import reduxThunk from 'redux-thunk';
+import { createBrowserHistory } from 'history';
 
-const rootReducer = combineReducers({
+export const browserHistory = createBrowserHistory();
+
+export const createRootReducer = (history: any) => combineReducers({
+  router: connectRouter(history),
   system: systemRecuder,
   videos: videosReducer,
 });
 
-export type AppState = ReturnType<typeof rootReducer>;
-
 export default function configureStore() {
-  const middlewares = [reduxThunk];
+  const middlewares = [
+    reduxThunk,
+    routerMiddleware(browserHistory),
+  ];
   const middlewareEnhancer = applyMiddleware(...middlewares);
-
-  const store = createStore(rootReducer, composeWithDevTools(middlewareEnhancer));
-
+  const store = createStore(
+    createRootReducer(browserHistory),
+    composeWithDevTools(middlewareEnhancer),
+  );
   return store;
 }
+
+export type AppState = ReturnType<ReturnType<typeof createRootReducer>>;

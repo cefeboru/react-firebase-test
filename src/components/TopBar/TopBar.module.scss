@@ -6,9 +6,19 @@
 
 .topBar {
   background-color: $base_color;
-  padding: 5px 25px;
+  padding: 8px 10px;
   position: sticky;
   top: 0;
   z-index: 10;
-  margin-bottom: 5px;
+
+  .navigation {
+    width: 100px;
+    height: 100%;
+    display: flex;
+
+    .link {
+      padding: 0px 10px;
+      font-size: 18px;
+    }
+  }
 }
