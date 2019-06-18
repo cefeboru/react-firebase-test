@@ -16,12 +16,12 @@ export const thunkSignIn = () => async (dispatch: Dispatch, getState: () => AppS
     await dispatch(saveUserData(asyncResp.user));
     await sessionStorage.setItem('oauthAccessToken', credential.oauthAccessToken);
     await dispatch(saveAccessToken(credential.oauthAccessToken));
-    await thunkGetRecommendedVideos()(dispatch, getState);
-    await thunkLoadSavedForLaterVideos()(dispatch, getState);
-    await dispatch(push('/'));
   } catch (err) {
     dispatch(updateSignInError(err.message));
   }
+  await thunkGetRecommendedVideos()(dispatch, getState);
+  await thunkLoadSavedForLaterVideos()(dispatch, getState);
+  await dispatch(push('/'));
 };
 
 export const thunkSignOut = () => async (dispatch: Dispatch) => {

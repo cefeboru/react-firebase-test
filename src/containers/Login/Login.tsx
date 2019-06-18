@@ -26,7 +26,7 @@ export class Login extends React.Component<LoginProps> {
     <React.Fragment>
       {
         loggedIn
-          ? { children }
+          ? <React.Fragment>{children}</React.Fragment>
           : <div className={style.login}>
               <div className={style.content}>
                 <GoogleButton onClick={signIn} />

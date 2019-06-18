@@ -2,10 +2,6 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Application Structure
-
-The aplication follow the re-ducks pattern, in which we separete the UI form the store logic. See the [article](https://www.freecodecamp.org/news/scaling-your-redux-app-with-ducks-6115955638be/) to learn more about it.
-
 ## Available Scripts
 
 In the project directory, you can run:
